@@ -130,6 +130,25 @@ export default function Index({ employees, query, sortColumn, sortDirection }) {
                                     <th className="p-4 text-center">
                                         <button
                                             onClick={() =>
+                                                handleSort("position")
+                                            }
+                                            className="hover:text-gray-200 transition duration-300"
+                                        >
+                                            Position
+                                            {currentSortColumn ===
+                                                "position" && (
+                                                <span className="inline-block ml-2">
+                                                    {currentSortDirection ===
+                                                    "asc"
+                                                        ? "↑"
+                                                        : "↓"}
+                                                </span>
+                                            )}
+                                        </button>
+                                    </th>
+                                    <th className="p-4 text-center">
+                                        <button
+                                            onClick={() =>
                                                 handleSort("birth_date")
                                             }
                                             className="hover:text-gray-200 transition duration-300"
@@ -166,6 +185,9 @@ export default function Index({ employees, query, sortColumn, sortDirection }) {
                                         </td>
                                         <td className="p-4">
                                             {employee.last_name}
+                                        </td>
+                                        <td className="p-4">
+                                            {employee.position}
                                         </td>
                                         <td className="p-4">
                                             <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm shadow-md">

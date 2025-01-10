@@ -1,5 +1,5 @@
 <?php
-
+//'employees.age'
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
@@ -21,15 +21,17 @@ class EmployeesController extends Controller
     $sortDirection = $request->input('sortDirection', 'asc');
 
     $employees = DB::table('employees')
-        ->where('first_name', 'like', '%' . $query . '%')
-        ->orWhere('last_name', 'like', '%' . $query . '%')
-        ->orderBy($sortColumn, $sortDirection)
+    ->join('titles', 'employees.emp_no', '=', 'titles.emp_no') // JOIN ตาราง titles
+    ->select('employees.*', 'titles.title as position') // เลือกข้อมูล position จาก titles ถ
+        ->where('first_name', 'like', '%' . $query . '%')// ค้นหาชื่อที่ตรงกับคำค้นหา (first_name)
+        ->orWhere('last_name', 'like', '%' . $query . '%')// ค้นหานามสกุล
+        ->orderBy($sortColumn, $sortDirection)// เรียงข้อมูลตามคอลัมน์ ( emp_no หรือ birth_date)
         ->paginate(10);  // กำหนดให้ข้อมูลแบ่งหน้า
 
     return Inertia::render('Employee/Index', [
-        'employees' => $employees,
-        'query' => $query,
-        'sortColumn' => $sortColumn,
+        'employees' => $employees,// ส่งข้อมูลพนักงานที่ผ่านการกรองไปที่ frontend
+        'query' => $query,// ส่งค่าคำค้นหาไปที่ frontend เพื่อใช้แสดงในช่องค้นหา
+        'sortColumn' => $sortColumn,// ส่งค่าคอลัมน์ที่เรียงลำดับ
         'sortDirection' => $sortDirection,
     ]);
 }
